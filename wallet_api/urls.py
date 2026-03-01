@@ -15,8 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
+from django.conf import settings
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+def project_root(request):
+    return Response({app: request.build_absolute_uri(f'/{app}/') for app in settings.CUSTOM_APPS})
+
 
 urlpatterns = [
+    path('', project_root),
     path('api-auth/', include('rest_framework.urls')),
     path('transactions/', include('transactions.urls')),
     path('categories/', include('categories.urls')),

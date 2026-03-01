@@ -1,11 +1,9 @@
-from django.urls import include, path
 from rest_framework.routers import DefaultRouter
+from .views import BudgetViewSet
 
 
 app_name = 'budgets'
 router = DefaultRouter()
-# router.register('snippets', SnippetViewSet)
+router.register('', BudgetViewSet, basename="budget")
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls

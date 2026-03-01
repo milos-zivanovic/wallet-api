@@ -31,22 +31,28 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
-    # Third party apps
+THIRD_PARTY_APPS = [
+    'django_filters',
     'rest_framework',
+]
 
-    # My apps
+CUSTOM_APPS = [
     'transactions',
     'categories',
     'budgets',
 ]
+
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,7 +147,6 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
 # Media files
@@ -153,7 +158,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Django Rest Framework Settings
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.OrderingFilter",
+        "rest_framework.filters.SearchFilter",
+    ],
 }
